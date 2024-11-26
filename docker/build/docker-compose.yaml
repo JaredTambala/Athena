@@ -1,0 +1,10 @@
+
+include:
+  - path:
+    - minio-compose.yaml
+    #- mlflow-compose.yaml
+    - jupyter-compose.yaml
+    #- airflow-compose.yaml
+    - trino-compose.yaml
+    #- spark-compose.yaml
+    - hive-compose.yaml

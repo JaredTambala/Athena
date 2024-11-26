@@ -1,0 +1,70 @@
+
+services:
+
+  minio:
+    restart: "always"
+    image: docker.io/minio/minio:latest
+    container_name: minio
+    hostname: minio
+    volumes:
+      - ../mnt/minio/data:/data
+      - ../mnt/minio/config:/root/.minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - default
+    command: server /data --console-address ":9001"
+
+  minio-create-mlflow-bucket:
+      image: minio/mc
+      depends_on:
+        - minio
+      entrypoint: /bin/bash
+      environment:
+        MLFLOW_DEFAULT_BUCKET: ${MLFLOW_DEFAULT_BUCKET}
+      command:
+      - -c
+      - |
+        mc alias set minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
+        if ! mc ls minio | grep --quiet $$ $${MLFLOW_DEFAULT_BUCKET}; then
+        mc mb minio/${MLFLOW_DEFAULT_BUCKET}
+        mc policy set public minio/${MLFLOW_DEFAULT_BUCKET}
+        else
+          echo ${MLFLOW_DEFAULT_BUCKET} already exists
+        fiL
+      networks:
+        - default
+
+  minio-create-polygon-bucket:
+      image: minio/mc
+      depends_on:
+        - minio
+      entrypoint: /bin/bash
+      environment:
+        POLYGON_DEFAULT_BUCKET: ${POLYGON_DEFAULT_BUCKET}
+      command:
+      - -c
+      - |
+        mc alias set minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
+        if ! mc ls minio | grep --quiet $$ $${POLYGON_DEFAULT_BUCKET}; then
+        mc mb minio/${POLYGON_DEFAULT_BUCKET}
+        mc policy set public minio/${POLYGON_DEFAULT_BUCKET}
+        else
+          echo ${POLYGON_DEFAULT_BUCKET} already exists
+        fi
+      networks:
+        - default
+
+volumes:
+  mysql:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

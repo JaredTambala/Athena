@@ -1,0 +1,18 @@
+
+services:
+  jupyter:
+    build:
+      dockerfile: ./jupyter/jupyter.Dockerfile
+    environment:
+      AIRFLOW_PROJ_DIR: ${AIRFLOW_PROJ_DIR}
+    volumes:
+      - ../mnt/jupyter:/home/jovyan/work
+      - ../mnt/airflow/dags:/home/jovyan/work/airflow_dags
+    container_name: juptyer_server
+    ports:
+      - '8888:8888'
+    networks:
+      - default
+
+networks:
+  default:
