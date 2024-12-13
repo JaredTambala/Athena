@@ -1,4 +1,4 @@
-FROM ghcr.io/mlflow/mlflow
+FROM ghcr.io/mlflow/mlflow:v2.15.0
 COPY ./mlflow/mlflow_requirements.txt /
 
 # Install basic build
