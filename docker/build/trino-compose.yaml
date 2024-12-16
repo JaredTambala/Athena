@@ -1,0 +1,17 @@
+services:
+
+  trino:
+    hostname: trino
+    image: 'trinodb/trino:latest'
+    ports:
+      - '8086:8080'
+    volumes:
+      - ./trino/etc:/etc/trino
+    depends_on:
+      - hive-metastore
+      - minio
+    networks:
+      - default
+
+networks:
+  default:

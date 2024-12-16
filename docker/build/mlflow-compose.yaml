@@ -1,0 +1,62 @@
+
+
+services:
+
+  db:
+    restart: "always"
+    hostname: mlflow-db
+    build:
+      dockerfile: ./mlflow/mlflow-mysql.Dockerfile
+    container_name: mlflow_db
+    volumes:
+      - ../mnt/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3310:3310"
+    networks:
+      - default
+
+  mlflow:
+    build:
+        dockerfile: ./mlflow/mlflow.Dockerfile
+    restart: "always"
+    depends_on:
+      - db
+      - minio
+      - minio-create-mlflow-bucket
+    container_name: mlflow_server
+    hostname: mlflow
+    networks:
+      - default
+    environment:
+      - MLFLOW_TRACKING_URI=http://localhost:5000
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
+    command: >
+        sh -c
+        "
+        mlflow server
+        --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mlflow_db:3310/${MYSQL_DATABASE}
+        --serve-artifacts
+        --artifacts-destination s3://mlflow
+        --default-artifact-root mlflow-artifacts:/artifacts
+        --host 0.0.0.0
+        --port 5000"
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+volumes:
+  mysql:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

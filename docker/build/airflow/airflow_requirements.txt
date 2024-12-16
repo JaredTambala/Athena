@@ -1,0 +1,12 @@
+lxml
+mlflow
+scikit-learn
+dvc
+catboost
+xgboost
+requests
+gx
+polygon-api-client
+boto3
+minio
+trino
