@@ -1,0 +1,18 @@
+{
+    "forex_minute_loader": 
+    {
+        "source_bucket_name": "flatfiles",
+        "type": "global_forex/minute_aggs_v1",
+        "latest_file_loaded": "2023-01-01",
+        "destination_bucket_name": "polygon",
+        "destination_folder": "raw"
+    },
+    "forex_day_loader": 
+    {
+        "source_bucket_name": "flatfiles",
+        "type": "global_forex/day_aggs_v1",
+        "latest_file_loaded": "2023-01-01",
+        "destination_bucket_name": "polygon",
+        "destination_folder": "raw"
+    }
+}

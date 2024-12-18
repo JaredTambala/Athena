@@ -35,7 +35,7 @@ services:
         mc policy set public minio/${MLFLOW_DEFAULT_BUCKET}
         else
           echo ${MLFLOW_DEFAULT_BUCKET} already exists
-        fiL
+        fi
       networks:
         - default
 
