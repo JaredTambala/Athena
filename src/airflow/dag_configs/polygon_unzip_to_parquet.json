@@ -1,0 +1,18 @@
+{
+    "forex_minute_unzipper": 
+    {
+        "source_folder": "raw",
+        "type": "global_forex/minute_aggs_v1",
+        "start_date": "2024-12-01",
+        "end_date": "2024-12-17",
+        "destination_folder": "unzipped"
+    },
+    "forex_day_unzipper": 
+    {
+        "source_folder": "raw",
+        "type": "global_forex/day_aggs_v1",
+        "start_date": "2023-01-01",
+        "end_date": "2024-12-17",
+        "destination_folder": "unzipped"
+    }
+}

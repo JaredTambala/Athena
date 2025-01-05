@@ -27,9 +27,20 @@ MAX_CONCURRENT_TASKS = 25
 
 
 def run_async_task_in_thread(async_func, *args):
-    thread = threading.Thread(target=lambda: asyncio.run(async_func(*args)))
+
+    exception_holder = []
+    def wrapper():
+        try:
+            asyncio.run(async_func(*args))
+        except Exception as e:
+            exception_holder.append(e)
+
+    thread = threading.Thread(target=wrapper)
     thread.start()
     thread.join()
+    # Raise the exception in the main thread if it occurred
+    if exception_holder:
+        raise exception_holder[0]
 
 @dag(
     dag_id="s3_to_s3_batch_worker",
@@ -196,8 +207,10 @@ def execute_s3_to_s3_batch_job():
             CONFIG_BUCKET, CONFIG_FILE_PATH, io.BytesIO(config_str), length=len(config_str)
         )
     file_list = find_files_to_download()
-    transfer_files_from_polygon_to_minio(file_list)
-    update_latest_file_uploaded(file_list)
+    transfer_task = transfer_files_from_polygon_to_minio(file_list)
+    update_task = update_latest_file_uploaded(file_list)
 
+    transfer_task >> update_task
+    
 execute_s3_to_s3_batch_job()   
     

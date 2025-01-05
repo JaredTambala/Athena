@@ -5,9 +5,12 @@ services:
       dockerfile: ./jupyter/jupyter.Dockerfile
     environment:
       AIRFLOW_PROJ_DIR: ${AIRFLOW_PROJ_DIR}
+      JUPYTER_TOKEN: ${JUPYTER_TOKEN}
     volumes:
       - ../mnt/jupyter:/home/jovyan/work
       - ../mnt/airflow/dags:/home/jovyan/work/airflow_dags
+      - /spark/lib/hadoop-aws-3.3.4.jar:/usr/local/spark-3.5.0-bin-hadoop3/jars/hadoop-aws-3.3.4.jar
+      - /spark/lib/aws-java-sdk-bundle-1.12.603.jar:/usr/local/spark-3.5.0-bin-hadoop3/jars/aws-java-sdk-bundle-1.12.603.jar
     container_name: juptyer_server
     ports:
       - '8888:8888'

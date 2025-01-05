@@ -14,6 +14,12 @@ services:
     ports:
       - "7077:7077"  # Spark master port
       - "8090:8080"  # Spark master web UI
+    volumes:
+      - ./catalog/hive/conf/metastore-site.xml:/opt/bitnami/spark/conf/metastore-site.xml:ro
+      - ./spark/conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml:ro
+      - ./spark/conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf:ro
+      - ./spark/lib/aws-java-sdk-bundle-1.12.603.jar:/opt/bitnami/spark/jars/aws-java-sdk-bundle-1.12.603.jar:ro
+      - ./spark/lib/hadoop-aws-3.3.4.jar:/opt/bitnami/spark/jars/hadoop-aws-3.3.4.jar:ro
     networks:
       - default
 
@@ -36,6 +42,12 @@ services:
       always
     ports:
       - "8091:8081"  # Spark worker web UI
+    volumes:
+      - ./catalog/hive/conf/metastore-site.xml:/opt/bitnami/spark/conf/metastore-site.xml:ro
+      - ./spark/conf/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml:ro
+      - ./spark/conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./spark/lib/aws-java-sdk-bundle-1.12.603.jar:/opt/bitnami/spark/jars/aws-java-sdk-bundle-1.12.603.jar:ro
+      - ./spark/lib/hadoop-aws-3.3.4.jar:/opt/bitnami/spark/jars/hadoop-aws-3.3.4.jar:ro
     networks:
       - default
 
