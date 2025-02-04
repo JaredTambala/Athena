@@ -21,10 +21,10 @@ services:
       - ./catalog/hive/conf/metastore-site.xml:/opt/hive/conf/metastore-site.xml:ro
       - ./spark/conf/hive-site.xml:/opt/hive/conf/hive-site.xml:ro
       - ./catalog/hive/lib/postgresql-42.7.4.jar:/opt/hive/lib/postgres.jar
-      - ./spark/lib/aws-java-sdk-bundle-1.12.603.jar:/opt/hive/lib/aws-java-sdk-bundle-1.12.603.jar:ro
+      - ./spark/lib/aws-java-sdk-bundle-1.12.262.jar:/opt/hive/lib/aws-java-sdk-bundle-1.12.262.jar:ro
       - ./spark/lib/hadoop-aws-3.3.4.jar:/opt/hive/lib/hadoop-aws-3.3.4.jar:ro
     environment:
-      HIVE_AUX_JARS_PATH: /opt/hadoop/share/hadoop/tools/lib/hadoop-aws-3.3.4.jar:/opt/hadoop/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.603.jar
+      HIVE_AUX_JARS_PATH: /opt/hadoop/share/hadoop/tools/lib/hadoop-aws-3.3.4.jar:/opt/hadoop/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.262.jar
       SERVICE_NAME: metastore
       DB_DRIVER: postgres
       POSTGRES_USER: ${POSTGRES_USER}

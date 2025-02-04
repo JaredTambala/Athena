@@ -1,14 +1,14 @@
 {
-    "forex_minute_unzipper": 
+    "forex_minute_convert_to_iceberg": 
     {
-        "source_folder": "raw",
+        "source_folder": "unzipped",
         "type": "global_forex/minute_aggs_v1",
-        "last_updated": "2024-06-01",
+        "last_updated": "2024-12-01",
         "destination_folder": "unzipped"
     },
-    "forex_day_unzipper": 
+    "forex_day_convert_to_iceberg": 
     {
-        "source_folder": "raw",
+        "source_folder": "unzipped",
         "type": "global_forex/day_aggs_v1",
         "last_updated": "2023-01-01",
         "destination_folder": "unzipped"

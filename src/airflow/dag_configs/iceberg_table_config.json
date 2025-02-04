@@ -1,0 +1,25 @@
+{
+    "forex_all_day_aggs" : 
+    {
+        "catalog_type": "iceberg",
+        "catalog_name": "polygon",
+        "catalog_uri": "thrift://hive-metastore:9083",
+        "catalog_warehouse": "s3a://iceberg/",
+        "namespace": "dev",
+        "schema_definition" : {
+            "ticker":  "string",
+            "volume": "long",
+            "open" : "double",
+            "close": "double",
+            "high": "double",
+            "low": "double",
+            "window_start_ns": "long",
+            "transactions": "long",
+            "date_time": "string",
+            "year": "integer",
+            "month": "integer",
+            "day": "integer"
+        },
+        "partition_by": ["year", "month", "ticker"]
+    }
+}
