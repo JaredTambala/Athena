@@ -60,8 +60,8 @@ x-airflow-common:
     AIRFLOW_VAR_POLYGON_ACCESS_KEY: ${POLYGON_ACCESS_KEY}
     AIRFLOW_VAR_POLYGON_SECRET_KEY: ${POLYGON_SECRET_KEY}
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_POSTGRES_USER}:${AIRFLOW_POSTGRES_PASSWORD}@postgres/${AIRFLOW_POSTGRES_DATABASE}
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${AIRFLOW_POSTGRES_USER}:${AIRFLOW_POSTGRES_PASSWORD}@postgres/${AIRFLOW_POSTGRES_DATABASE}
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_POSTGRES_USER}:${AIRFLOW_POSTGRES_PASSWORD}@airflow-postgres/${AIRFLOW_POSTGRES_DATABASE}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${AIRFLOW_POSTGRES_USER}:${AIRFLOW_POSTGRES_PASSWORD}@airflow-postgres/${AIRFLOW_POSTGRES_DATABASE}
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
@@ -118,6 +118,7 @@ services:
     networks:
       - default
     container_name: airflow-postgres
+    hostname: airflow-postgres
 
   redis:
     # Redis is limited to 7.2-bookworm due to licencing change
@@ -154,6 +155,9 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    volumes:
+      - /spark/lib/hadoop-aws-3.3.4.jar:/home/airflow/.local/lib/python3.11/site-packages/pyspark/jars/hadoop-aws-3.3.4.jar
+      - /spark/lib/aws-java-sdk-bundle-1.12.262.jar:/home/airflow/.local/lib/python3.11/site-packages/pyspark/jars/aws-java-sdk-bundle-1.12.262.jar
     networks:
       - default
 
@@ -201,6 +205,9 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    #volumes:
+    #  - /spark/lib/hadoop-aws-3.3.4.jar:/home/airflow/.local/lib/python3.11/site-packages/pyspark/jars/hadoop-aws-3.3.4.jar
+    #  - /spark/lib/aws-java-sdk-bundle-1.12.262.jar:/home/airflow/.local/lib/python3.11/site-packages/pyspark/jars/aws-java-sdk-bundle-1.12.262.jar
     networks:
       - default
 
